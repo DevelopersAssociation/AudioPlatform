@@ -9,8 +9,6 @@ import android.util.Log;
 
 import com.fruitbasket.audioplatform.play.PlayCommand;
 import com.fruitbasket.audioplatform.play.PlayerInvoker;
-import com.fruitbasket.audioplatform.play.Sin19kWavPlayCommand;
-import com.fruitbasket.audioplatform.play.Sin19kWavPlayer;
 import com.fruitbasket.audioplatform.play.WavePlayCommand;
 import com.fruitbasket.audioplatform.play.WavePlayer;
 import com.fruitbasket.audioplatform.record.RecordCommand;
@@ -83,14 +81,6 @@ final public class AudioService extends Service {
         playerInvoker.play();
     }
 
-    public void startPlaySin19kWav(){
-        PlayCommand sin19kWavPlayCommand=new Sin19kWavPlayCommand(
-                new Sin19kWavPlayer()
-        );
-        playerInvoker.setCommand(sin19kWavPlayCommand);
-        playerInvoker.play();
-    }
-
     /**
      * 停止播放声波
      */
@@ -105,9 +95,6 @@ final public class AudioService extends Service {
         playerInvoker.release();
     }
 
-    /**
-     * 开始录制wav格式的音频
-     */
     public void startRecordWav(){
         Log.i(TAG,"startRecordWav()");
         RecordCommand recordCommand=new WavRecordCommand(
@@ -116,6 +103,23 @@ final public class AudioService extends Service {
         recorderInvoker.setCommand(recordCommand);
         recorderInvoker.start();
     }
+
+    /**
+     * 开始录制wav格式的音频
+     * @param channelIn
+     * @param sampleRate
+     * @param encoding
+     */
+    public void startRecordWav(int channelIn,int sampleRate,int encoding){
+        Log.i(TAG,"startRecordWav(channelIn,sampleRate,encoding");
+        RecordCommand recordCommand=new WavRecordCommand(
+                new WavRecorder(channelIn,sampleRate,encoding)
+        );
+        recorderInvoker.setCommand(recordCommand);
+        recorderInvoker.start();
+    }
+
+
 
     /**
      * 停止录制音频

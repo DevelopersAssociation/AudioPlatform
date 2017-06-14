@@ -73,7 +73,6 @@ final public class AppCondition {
 			appExternalDir =null;
 		}
 
-
 	}
 	
 	public static  AppCondition getInstance(){

@@ -21,8 +21,6 @@ import com.fruitbasket.audioplatform.R;
 import com.fruitbasket.audioplatform.play.Player;
 import com.fruitbasket.audioplatform.play.WavePlayer;
 
-import java.io.File;
-
 final public class MainActivity extends Activity {
     private static final String TAG=".MainActivity";
 
@@ -33,8 +31,6 @@ final public class MainActivity extends Activity {
 
     private RadioGroup channelInRG;
     private ToggleButton recorderTB;
-
-    private ToggleButton testTB;
 
     private int channelOut= Player.CHANNEL_OUT_BOTH;
     private int channelIn= AudioFormat.CHANNEL_IN_MONO;
@@ -73,7 +69,7 @@ final public class MainActivity extends Activity {
         }
 
         ///测试
-        File dir=new File(AppCondition.getAppExternalDir());
+        /*File dir=new File(AppCondition.getAppExternalDir());
         if(dir.exists()){
             Log.d(TAG,"dir.exists()==true : "+AppCondition.getAppExternalDir()+"is exists");
             String [] names=dir.list();
@@ -90,7 +86,7 @@ final public class MainActivity extends Activity {
         }
         else{
             Log.d(TAG,"dir.exists()==false : "+AppCondition.getAppExternalDir()+"is not exists");
-        }
+        }*/
         ///
 
         ///测试：查看数据程序数据文件夹
@@ -120,7 +116,6 @@ final public class MainActivity extends Activity {
     protected void onPause(){
         super.onPause();
         Log.i(TAG,"onPause()");
-
     }
 
     @Override
@@ -207,9 +202,6 @@ final public class MainActivity extends Activity {
         });
         recorderTB=(ToggleButton)findViewById(R.id.recorder_tb);
         recorderTB.setOnClickListener(tcListener);
-
-        testTB=(ToggleButton)findViewById(R.id.test_tb);
-        testTB.setOnClickListener(tcListener);
     }
 
     private class ToggleClickListener implements View.OnClickListener {
@@ -230,13 +222,6 @@ final public class MainActivity extends Activity {
                         startRecordWav();
                     } else {
                         stopRecord();
-                    }
-                    break;
-                case R.id.test_tb:
-                    if (((ToggleButton) view).isChecked()) {
-                        test();
-                    } else {
-                        stopTest();
                     }
                     break;
                 default:
@@ -267,7 +252,11 @@ final public class MainActivity extends Activity {
         private void startRecordWav(){
             Log.i(TAG,"startRecordWav()");
             if(audioService!=null){
-                audioService.startRecordWav();
+                audioService.startRecordWav(
+                        channelIn,
+                        AppCondition.DEFAULE_SIMPLE_RATE,
+                        AudioFormat.ENCODING_PCM_16BIT
+                );
             }
             else{
                 Log.i(TAG,"audioService==null");
@@ -278,26 +267,6 @@ final public class MainActivity extends Activity {
             Log.i(TAG,"stopRecord()");
             if(audioService!=null){
                 audioService.stopRecord();
-            }
-            else{
-                Log.i(TAG,"audioService==null");
-            }
-        }
-
-        private void test(){
-            Log.i(TAG,"test()");
-            if(audioService!=null){
-                audioService.startPlaySin19kWav();
-            }
-            else{
-                Log.i(TAG,"audioService==null");
-            }
-        }
-
-        private void stopTest(){
-            Log.i(TAG,"stopTest()");
-            if(audioService!=null){
-                audioService.stopPlay();
             }
             else{
                 Log.i(TAG,"audioService==null");

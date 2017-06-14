@@ -43,7 +43,7 @@ public abstract class Recorder {
     public abstract boolean stop();
 
     /**
-     * get a recorded file name by time. If the device has not got a external stroage, it will return null
+     * get a recorded file name by time.
      * @param extensionName extension name of the file
      * @return file name
      */
