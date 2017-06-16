@@ -31,12 +31,16 @@ public class WavRecorder extends Recorder {
 
     public WavRecorder(){
         super();
-        audioName =getRecordedFileName("pcm");
+        initialize();
     }
 
     public WavRecorder(int channelIn, int sampleRate, int encoding){
         super(channelIn,sampleRate,encoding);
-        audioName =getRecordedFileName("pcm");
+        initialize();
+    }
+
+    private void initialize(){
+        audioName =getRecordedFileName("_Watch");//命名方式有些奇怪，后续要改进
     }
 
     @Override
