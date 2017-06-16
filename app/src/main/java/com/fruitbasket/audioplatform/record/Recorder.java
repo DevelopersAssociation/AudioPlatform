@@ -48,7 +48,7 @@ public abstract class Recorder {
      * @return file name
      */
     protected static String getRecordedFileName(String extensionName){
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH'h'-mm'h'-ss's'");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH'h'-mm'm'-ss's'");
         return df.format(System.currentTimeMillis())+"."+extensionName;
     }
 }
