@@ -37,6 +37,11 @@ public abstract class Recorder {
     public abstract boolean start();
 
     /**
+     * 这个方法设置有点怪异，后续要改进
+     */
+    public abstract void updateSubDir();
+
+    /**
      * 停止录音
      * @return true 成功停止录音
      */

@@ -112,14 +112,26 @@ final public class AudioService extends Service {
      */
     public void startRecordWav(int channelIn,int sampleRate,int encoding){
         Log.i(TAG,"startRecordWav(channelIn,sampleRate,encoding");
-        RecordCommand recordCommand=new WavRecordCommand(
-                new WavRecorder(channelIn,sampleRate,encoding)
-        );
-        recorderInvoker.setCommand(recordCommand);
+
+        //这里似乎也存在问题。 参数问题
+        if(recorderInvoker.getRecordCommand()!=null &&recorderInvoker.getRecordCommand() instanceof WavRecordCommand){
+            Log.i(TAG,"startRecordWav(): recorderInvoker.getRecordCommand()!=null &&recorderInvoker.getRecordCommand() instanceof WavRecordCommand");
+        }
+        else{
+            Log.i(TAG,"create a new RecordCommand");
+            RecordCommand recordCommand=new WavRecordCommand(
+                    new WavRecorder(channelIn,sampleRate,encoding)
+            );
+            recorderInvoker.setCommand(recordCommand);
+        }
+
         recorderInvoker.start();
     }
 
-
+    public void updateSubDir(){
+        Log.i(TAG,"updateSubDir()");
+        recorderInvoker.updateSubDir();
+    }
 
     /**
      * 停止录制音频

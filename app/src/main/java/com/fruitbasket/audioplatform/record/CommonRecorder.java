@@ -97,4 +97,9 @@ public class CommonRecorder extends Recorder {
         isRecording=false;
         return true;
     }
+
+    @Override
+    public void updateSubDir(){
+
+    }
 }

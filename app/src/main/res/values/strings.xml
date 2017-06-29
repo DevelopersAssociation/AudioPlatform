@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">AudioPlatform</string>
-    <string name="app_version_name">v1.0.1</string>
-    <string name="app_full_name">AudioPlatform v1.0.1 stream</string>
+    <string name="app_version_name">v1.0.2</string>
+    <string name="app_full_name">AudioPlatform v1.0.2 stream</string>
 
     <string name="wave_player">wave player</string>
     <string name="choose_channel_out">choose a channel out : </string>
@@ -13,4 +13,5 @@
     <string name="mono">mono</string>
     <string name="stereo">stereo</string>
     <string name="record_wav">record wav</string>
+    <string name="create_dir">create  directory</string>
 </resources>

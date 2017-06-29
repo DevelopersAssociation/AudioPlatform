@@ -29,22 +29,21 @@ public class WavRecorder extends Recorder {
     private boolean isRecording;
     private String audioName;//录音文件的名字
 
+    private String subDir;//用于存放录音文件的子目录
+
     public WavRecorder(){
         super();
-        initialize();
+        updateSubDir();
     }
 
     public WavRecorder(int channelIn, int sampleRate, int encoding){
         super(channelIn,sampleRate,encoding);
-        initialize();
-    }
-
-    private void initialize(){
-        audioName =getRecordedFileName("_Watch");//命名方式有些奇怪，后续要改进
+        updateSubDir();
     }
 
     @Override
     public boolean start() {
+        Log.i(TAG,"start()");
         //使用异步的方法录制音频
         new Thread(new Runnable() {
             @Override
@@ -64,14 +63,21 @@ public class WavRecorder extends Recorder {
                 byte[] buffer = new byte[bufferSize];
 
                 try {
+                    //创建子目录
+
+                    boolean state=(new File(AppCondition.getAppExternalDir()+File.separator+subDir+File.separator)).mkdir();
+                    Log.d(TAG,"create sub dir state=="+state);
+
+                    audioName =getRecordedFileName("_Watch");//命名方式有些奇怪，后续要改进
+
                     File audioFile;
                     DataOutputStream output;
 
-                    if (Environment.getExternalStorageState()
+                    if (Environment.getExternalStorageState()// 如果外存存在
                             .equals(android.os.Environment.MEDIA_MOUNTED)){
                         Log.i(TAG,"make1: if the device has got a external storage");
-                        // 如果外存存在
-                        audioFile=new File(AppCondition.getAppExternalDir()+File.separator+audioName);
+
+                        audioFile=new File(AppCondition.getAppExternalDir()+File.separator+subDir+File.separator+audioName);
 
                         output= new DataOutputStream(
                                 new BufferedOutputStream(
@@ -79,15 +85,15 @@ public class WavRecorder extends Recorder {
                                 )
                         );
                     }
-                    else{
+                    else{//否则
                         Log.i(TAG,"mark2: the device has not got a external storage");
-                        //否则
+                        String string=subDir+File.separator+audioName;
                         output= new DataOutputStream(
                                 new BufferedOutputStream(
-                                        MyApp.getContext().openFileOutput(audioName, Context.MODE_PRIVATE)
+                                        MyApp.getContext().openFileOutput(string, Context.MODE_PRIVATE)
                                 )
                         );
-                        audioFile=MyApp.getContext().getFileStreamPath(audioName);
+                        audioFile=MyApp.getContext().getFileStreamPath(string);
                     }
 
                     AudioRecord audioRecord = new AudioRecord(
@@ -100,6 +106,7 @@ public class WavRecorder extends Recorder {
 
                     isRecording = true;
                     while (isRecording) {
+
                         int readResult = audioRecord.read(buffer, 0, bufferSize);
                         if (readResult == AudioRecord.ERROR_INVALID_OPERATION) {
                             Log.e(TAG, "readState==AudioRecord.ERROR_INVALID_OPERATION");
@@ -127,25 +134,25 @@ public class WavRecorder extends Recorder {
                     BufferedInputStream inputStream;
                     BufferedOutputStream outputStream;
                     int length;
-                    if(Environment.getExternalStorageState()
+                    if(Environment.getExternalStorageState()//如果外存存在
                             .equals(android.os.Environment.MEDIA_MOUNTED)){
-                        Log.i(TAG,"if the device has got a external storage");
-                        //如果外存存在
+                        Log.i(TAG,"the device has got a external storage");
+
                         FileInputStream fis = new FileInputStream(audioFile);
                         inputStream= new BufferedInputStream(fis);
 
                         outputStream = new BufferedOutputStream(
-                                new FileOutputStream(AppCondition.getAppExternalDir()+File.separator+audioName + ".wav")
+                                new FileOutputStream(AppCondition.getAppExternalDir()+File.separator+subDir+File.separator+audioName + ".wav")
                         );
                         length= (int) fis.getChannel().size();
                     }
-                    else{
-                        //否则
-                        FileInputStream fis=MyApp.getContext().openFileInput(audioName);
+                    else{//否则
+                        String string=subDir+File.separator+audioName;
+                        FileInputStream fis=MyApp.getContext().openFileInput(string);
                         inputStream= new BufferedInputStream(fis);
 
                         outputStream=new BufferedOutputStream(
-                                MyApp.getContext().openFileOutput(audioName+".wav",Context.MODE_PRIVATE)
+                                MyApp.getContext().openFileOutput(string+".wav",Context.MODE_PRIVATE)
                         );
                         length=(int)fis.getChannel().size();
 
@@ -185,5 +192,36 @@ public class WavRecorder extends Recorder {
     public boolean stop() {
         isRecording = false;
         return true;
+    }
+
+    /**
+     * 这个函数的设置很怪，后续要改进
+     */
+    @Override
+    public void updateSubDir(){
+        int maxNumber=0;
+        int tem;
+        String[] names=(new File(AppCondition.getAppExternalDir())).list();
+        if(names!=null){
+            Log.d(TAG,"names!=null");
+            for(String name:names){
+                if(name.matches("[0-9]{1,}")) {
+                    Log.i(TAG,"name.matches(\"[0-9]{1,}\")==ture");
+                    tem = Integer.parseInt(name);
+                    if (maxNumber < tem) {
+                        maxNumber = tem;
+                    }
+                }
+                else{
+                    Log.i(TAG,"name.matches(\"[0-9]{1,}\")==false");
+                    continue;
+                }
+            }
+        }
+        else{
+            Log.w(TAG,"names==null");
+        }
+        Log.i(TAG,"maxNumber=="+maxNumber);
+        subDir=String.valueOf(maxNumber+1);
     }
 }

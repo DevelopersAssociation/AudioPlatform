@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.fruitbasket.audioplatform.AppCondition;
@@ -31,6 +33,7 @@ final public class MainActivity extends Activity {
 
     private RadioGroup channelInRG;
     private ToggleButton recorderTB;
+    private Button createDirB;
 
     private int channelOut= Player.CHANNEL_OUT_BOTH;
     private int channelIn= AudioFormat.CHANNEL_IN_MONO;
@@ -202,6 +205,22 @@ final public class MainActivity extends Activity {
         });
         recorderTB=(ToggleButton)findViewById(R.id.recorder_tb);
         recorderTB.setOnClickListener(tcListener);
+
+        createDirB=(Button)findViewById(R.id.create_dir_b);
+        createDirB.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG,"onClick()");
+                if(audioService!=null){
+                    audioService.updateSubDir();
+                }
+                else{
+                    Log.w(TAG,"audioService==null");
+                }
+                Toast.makeText(MainActivity.this,"dir created", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private class ToggleClickListener implements View.OnClickListener {
@@ -235,7 +254,7 @@ final public class MainActivity extends Activity {
                 audioService.startPlayWav(channelOut,waveRate);
             }
             else{
-                Log.i(TAG,"audioService==null");
+                Log.w(TAG,"audioService==null");
             }
         }
 
@@ -245,7 +264,7 @@ final public class MainActivity extends Activity {
                 audioService.stopPlay();
             }
             else{
-                Log.i(TAG,"audioService==null");
+                Log.w(TAG,"audioService==null");
             }
         }
 
@@ -259,7 +278,7 @@ final public class MainActivity extends Activity {
                 );
             }
             else{
-                Log.i(TAG,"audioService==null");
+                Log.w(TAG,"audioService==null");
             }
         }
 
@@ -269,7 +288,7 @@ final public class MainActivity extends Activity {
                 audioService.stopRecord();
             }
             else{
-                Log.i(TAG,"audioService==null");
+                Log.w(TAG,"audioService==null");
             }
         }
     }

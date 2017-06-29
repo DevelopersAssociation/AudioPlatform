@@ -18,6 +18,11 @@ public class WavRecordCommand extends RecordCommand {
     }
 
     @Override
+    public void updateSubDir() {
+        wavRecorder.updateSubDir();
+    }
+
+    @Override
     public void stop() {
         wavRecorder.stop();
     }

@@ -18,6 +18,11 @@ public class CRCommnad extends RecordCommand {
     }
 
     @Override
+    public void updateSubDir(){
+        commonRecoder.updateSubDir();
+    }
+
+    @Override
     public void stop() {
         commonRecoder.stop();
     }

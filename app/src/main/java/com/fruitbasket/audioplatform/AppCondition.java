@@ -64,9 +64,8 @@ final public class AppCondition {
 				.equals(android.os.Environment.MEDIA_MOUNTED)){
 			Log.d(TAG,"the device has a external storage");
 			appExternalDir =Environment.getExternalStorageDirectory()+ File.separator+"AudioPlatform";
-			Log.d(TAG,"appExternalDir"+appExternalDir);
-			boolean state=(new File(appExternalDir)).mkdirs();
-			Log.d(TAG,"state of create app external dir: state="+state);
+			Log.d(TAG,"appExternalDir=="+appExternalDir);
+			(new File(appExternalDir)).mkdirs();
 		}
 		else{
 			Log.i(TAG,"the device has not got a external storage");

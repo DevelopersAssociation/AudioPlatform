@@ -6,5 +6,6 @@ package com.fruitbasket.audioplatform.record;
 
 public abstract class RecordCommand {
     public abstract void start();
+    public abstract void updateSubDir();
     public abstract void stop();
 }
