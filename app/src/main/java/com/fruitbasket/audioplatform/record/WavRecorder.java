@@ -64,11 +64,19 @@ public class WavRecorder extends Recorder {
 
                 try {
                     //创建子目录
-
-                    boolean state=(new File(AppCondition.getAppExternalDir()+File.separator+subDir+File.separator)).mkdir();
+                    File subFile=new File(AppCondition.getAppExternalDir()+File.separator+subDir+File.separator);
+                    boolean state=(subFile).mkdir();
                     Log.d(TAG,"create sub dir state=="+state);
 
-                    audioName =getRecordedFileName("_Watch");//命名方式有些奇怪，后续要改进
+                    String[] files=subFile.list();
+                    int fileNumber;
+                    if(files==null){
+                        fileNumber=0;
+                    }
+                    else{
+                        fileNumber=subFile.list().length;
+                    }
+                    audioName =getRecordedFileName("_Watch"+(fileNumber+1));//命名方式有些奇怪，后续要改进
 
                     File audioFile;
                     DataOutputStream output;
