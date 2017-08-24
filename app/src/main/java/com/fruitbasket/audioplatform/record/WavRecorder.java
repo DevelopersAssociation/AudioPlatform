@@ -185,7 +185,7 @@ public class WavRecorder extends Recorder {
                     }
                     inputStream.close();
                     outputStream.close();
-                    audioFile.delete();
+                    audioFile.delete();//删除原始的pcm文件
 
                 } catch (IOException e) {
                     e.printStackTrace();

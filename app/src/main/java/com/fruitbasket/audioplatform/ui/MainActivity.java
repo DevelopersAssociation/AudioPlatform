@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ final public class MainActivity extends Activity {
     private RadioGroup channelInRG;
     private ToggleButton recorderTB;
     private Button createDirB;
+
+    private ToggleButton testTB;
 
     private int channelOut= Player.CHANNEL_OUT_BOTH;
     private int channelIn= AudioFormat.CHANNEL_IN_MONO;
@@ -140,7 +143,7 @@ final public class MainActivity extends Activity {
     }
 
     private void initializeViews(){
-        ToggleClickListener tcListener=new ToggleClickListener();
+        ToggleCheckedChangeListener tcListener=new ToggleCheckedChangeListener();
 
         channelOutRG =(RadioGroup)findViewById(R.id.channel_out_rg);
         channelOutRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -161,7 +164,7 @@ final public class MainActivity extends Activity {
         });
 
         waveProducerTB =(ToggleButton)findViewById(R.id.wave_player_tb);
-        waveProducerTB.setOnClickListener(tcListener);
+        waveProducerTB.setOnCheckedChangeListener(tcListener);
 
         waveRateTV =(TextView)findViewById(R.id.waverate_tv);
 
@@ -204,7 +207,7 @@ final public class MainActivity extends Activity {
             }
         });
         recorderTB=(ToggleButton)findViewById(R.id.recorder_tb);
-        recorderTB.setOnClickListener(tcListener);
+        recorderTB.setOnCheckedChangeListener(tcListener);
 
         createDirB=(Button)findViewById(R.id.create_dir_b);
         createDirB.setOnClickListener(new View.OnClickListener(){
@@ -221,28 +224,38 @@ final public class MainActivity extends Activity {
                 Toast.makeText(MainActivity.this,"dir created", Toast.LENGTH_SHORT).show();
             }
         });
+
+        testTB=(ToggleButton)findViewById(R.id.test_tb);
+        testTB.setOnCheckedChangeListener(tcListener);
     }
 
-    private class ToggleClickListener implements View.OnClickListener {
-        private static final String TAG="...ToggleClickListener";
+    private class ToggleCheckedChangeListener implements CompoundButton.OnCheckedChangeListener{
+        private static final String TAG="...TCCListener";
 
         @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
+        public void onCheckedChanged(CompoundButton button,boolean isChecked){
+            switch (button.getId()) {
                 case R.id.wave_player_tb:
-                    if (((ToggleButton) view).isChecked()) {
+                    if (isChecked) {
                         startPlayWav();
                     } else {
                         stopPlay();
                     }
                     break;
                 case R.id.recorder_tb:
-                    if (((ToggleButton) view).isChecked()) {
+                    if (isChecked) {
                         startRecordWav();
                     } else {
                         stopRecord();
                     }
                     break;
+                case R.id.test_tb:
+                    if (isChecked) {
+                        startTest();
+                    }
+                    else{
+                        stopTest();
+                    }
                 default:
                     Log.w(TAG,"onClick(): id error");
             }
@@ -284,6 +297,26 @@ final public class MainActivity extends Activity {
 
         private void stopRecord(){
             Log.i(TAG,"stopRecord()");
+            if(audioService!=null){
+                audioService.stopRecord();
+            }
+            else{
+                Log.w(TAG,"audioService==null");
+            }
+        }
+
+        private void startTest(){
+            Log.i(TAG,"startTest()");
+            if(audioService!=null){
+                audioService.startRecordTest();
+            }
+            else{
+                Log.w(TAG,"audioService==null");
+            }
+        }
+
+        private void stopTest(){
+            Log.i(TAG,"stopTest()");
             if(audioService!=null){
                 audioService.stopRecord();
             }

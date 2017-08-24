@@ -13,6 +13,8 @@ import com.fruitbasket.audioplatform.play.WavePlayCommand;
 import com.fruitbasket.audioplatform.play.WavePlayer;
 import com.fruitbasket.audioplatform.record.RecordCommand;
 import com.fruitbasket.audioplatform.record.RecorderInvoker;
+import com.fruitbasket.audioplatform.record.RecorderTest;
+import com.fruitbasket.audioplatform.record.RecorderTestCommand;
 import com.fruitbasket.audioplatform.record.WavRecordCommand;
 import com.fruitbasket.audioplatform.record.WavRecorder;
 
@@ -95,12 +97,16 @@ final public class AudioService extends Service {
         playerInvoker.release();
     }
 
-    public void startRecordWav(){
-        Log.i(TAG,"startRecordWav()");
-        RecordCommand recordCommand=new WavRecordCommand(
-                new WavRecorder()
-        );
-        recorderInvoker.setCommand(recordCommand);
+    public void startRecordTest(){
+        if(recorderInvoker.getRecordCommand()!=null && recorderInvoker.getRecordCommand() instanceof RecorderTestCommand){
+
+        }
+        else{
+            RecorderTestCommand recorderTestCommand=new RecorderTestCommand(
+                    new RecorderTest()
+            );
+            recorderInvoker.setCommand(recorderTestCommand);
+        }
         recorderInvoker.start();
     }
 

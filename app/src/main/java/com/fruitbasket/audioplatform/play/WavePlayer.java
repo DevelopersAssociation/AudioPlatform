@@ -34,7 +34,7 @@ public class WavePlayer extends Player {
 
     @Override
     public void play() {
-        final int bufferSize = 3* AudioTrack.getMinBufferSize(///
+        final int bufferSize = 3* AudioTrack.getMinBufferSize(
                 sampleRate,
                 AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
@@ -78,7 +78,7 @@ public class WavePlayer extends Player {
                 while (audioTrack != null && audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
 
                     for (int i = 0; i < wave.length; ++i, ++index) {
-                        wave[i] = (short) (Short.MAX_VALUE/2 *///
+                        wave[i] = (short) (Short.MAX_VALUE/2 *
                                 Math.sin(2.0 * Math.PI * index / sampleCountInWave)
                         );
                     }
